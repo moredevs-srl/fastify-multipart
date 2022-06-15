@@ -153,17 +153,11 @@ function fastifyMultipart (fastify, options, done) {
           const field = req.body[key]
           if (field.value !== undefined) {
             body[key] = field.value
-          } else if (Array.isArray(field) && typeof options.sharedSchemaId === 'string') {
+          } else if (Array.isArray(field)) {
             body[key] = []
             for (const arrayField of field) {
-               if (arrayField.file) {
-                 body[key].push({
-                   fieldname: arrayField.fieldname,
-                   encoding: arrayField.encoding,
-                   filename: arrayField.filename,
-                   mimetype: arrayField.mimetype
-                   value: arrayField.value
-                 })
+               if (field.value !== undefined) {
+                 body[key].push(arrayField.value)
                }
             }
           } else if (field._buf !== undefined) {
